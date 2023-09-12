@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html>
+    <meta charset="utf-8">
+    <title>Login Page</title>
+    <head>
+        <meta charset="utf-8">
+        <title>Signup Page</title>
+        <link rel="stylesheet" href ="/css/signup.css">
+    </head>
+    <body>
+
+        <nav>
+            <a href="home.html"><img src="/images/logo-removebg-preview.png" height="200" width="200"  alt="logo"></a>    
+            <p>AI HUB</p>
+            <div class="topnav">
+                <ul>
+                    <li><a href = "/html/home.html">Home</a></li>
+                    <li><a href = "/html/aboutus.html">About us</a></li>
+                    <li><a href = "/html/login.html">Sign in</a></li>
+                    <li><a href = "/html/signup.html">Sign up</a></li>
+                    <li><a href = "/html/contactus.html">Contact us</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+            <div class = "container">
+                
+                <div class = "signup">
+                    <div class = "headcontain"><h1>Sign up</h1></div>
+                    
+                    
+                    <form action = "#" method = "post" name = "signup-form" id = "signup-form" class="signup-class">
+                        <div class="details">
+                            <span class="requ">Firstname</span>
+                            <br>
+                            <input type="text" id="fname" name="fname" placeholder="Firstname" class="inputbox" onfocusout="myValidationfname()" required><br>
+                            <span class = "validatefname"></span>
+                            <br>
+                            <span class="requ">Lastname</span>
+                            <br>
+                            <input type ="text" id = "lname" name="lname" placeholder="Lastname" class = "inputbox" onfocusout="myValidationlname()" required><br>
+                            <span class = "validatelname"></span>
+                            <br>
+                            <span class="requ">Date of birth</span>
+                            <br>
+                            <input type = "date" id = "dob" name="dob"  class = "inputbox" onblur="calculateAge()"><br>
+                            <span class="requ">Age</span>
+                            <br>
+                            <input type = "text" id = "age" name="age" placeholder="Enter Age" class = "inputbox" onfocusout="myValidationAge()" required><br>
+                            <span class = "valid-age-msg"></span>
+                            <br>
+                            <span class="requ">Gender</span>
+                            <br>
+                            
+                            <input type= "radio" id = "male" name = gender value="Male" required>
+                            <label for="Male">Male</label>
+                            
+                            <input type = "radio" id = "female" name = gender value="Female" required>
+                            <label for="Female">Female</label>
+
+                            <input type = "radio" id = "other" name = gender value="Other" required>
+                            <label for="Female">Other</label>
+                            <br>
+                            
+                            <br>
+                            <span class = "requ"> Phone number</span>
+                            <br>                
+                            <input type = "text" id = "phone" name = "phone" placeholder = "123-456-7890"  class = "inputbox" onfocusout = "myValidationPhone()"  required><br>
+                            <span class = "validatephno"></span>
+                            <br>
+                            <span class = "requ">Email ID</span>
+                            <br>
+                            <input type = "email" id = "email" name = "email" class = "inputbox" placeholder="Enter Email ID" onfocusout="myValidationEmail()" required><br>
+                            <span class="email-validation-msg"></span><br>
+                            <span class = "requ">Address</span>
+                            <br>
+                            <input type = "text" id = "address" name = "address" rows="4" cols="50" class = "inputbox" placeholder="Enter The Address" required><br>
+
+                            <label for="state">State</label>
+                            <select name="state" id = "state">
+                                <option value="">Select State</option>
+                                <option value="AN">Andaman and Nicobar Islands</option>
+                                <option value="AP">Andhra Pradesh</option>
+                                <option value="AR">Arunachal Pradesh</option>
+                                <option value="AS">Assam</option>
+                                <option value="BR">Bihar</option>
+                                <option value="CH">Chandigarh</option>
+                                <option value="CT">Chhattisgarh</option>
+                                <option value="DN">Dadra and Nagar Haveli</option>
+                                <option value="DD">Daman and Diu</option>   
+                                <option value="DL">Delhi</option>
+                                <option value="GA">Goa</option>
+                                <option value="GJ">Gujarat</option>
+                                <option value="HR">Haryana</option>
+                                <option value="HP">Himachal Pradesh</option>
+                                <option value="JK">Jammu and Kashmir</option>
+                                <option value="JH">Jharkhand</option>
+                                <option value="KA">Karnataka</option>
+                                <option value="KL">Kerala</option>
+                                <option value="LA">Ladakh</option>
+                                <option value="LD">Lakshadweep</option>
+                                <option value="MP">Madhya Pradesh</option>
+                                <option value="MH">Maharashtra</option>
+                                <option value="MN">Manipur</option>
+                                <option value="ML">Meghalaya</option>
+                                <option value="MZ">Mizoram</option>
+                                <option value="NL">Nagaland</option>
+                                <option value="OR">Odisha</option>
+                                <option value="PY">Puducherry</option>
+                                <option value="PB">Punjab</option>
+                                <option value="RJ">Rajasthan</option>
+                                <option value="SK">Sikkim</option>
+                                <option value="TN">Tamil Nadu</option>
+                                <option value="TG">Telangana</option>
+                                <option value="TR">Tripura</option>
+                                <option value="UP">Uttar Pradesh</option>
+                                <option value="UT">Uttarakhand</option>
+                                <option value="WB">West Bengal</option>
+                            </select><br>
+
+                            <label for = "city">City</label>
+                                <select name = "city" id = "city">
+                                    <option value="">Select City</option>
+                                </select><br>
+                            
+                            <span class="requ">Username</span>
+                            <br>
+                            <input type="text" id = "user" name="user" placeholder="Enter the username" class = "inputbox" onfocusout="myValidationUsername()" required><br>
+                            <span class = "username-validation-msg"></span>
+                            <br>
+                            <span class="requ">Password</span>
+                            <br>
+                            <input type = "password" id = "pass" placeholder="Enter the password"  class = "inputbox" onfocusout = "myValidationPassword()" required><br>
+                            <span class="password-validation-msg"></span><br>
+                            <span class="requ">Confirm password</span>
+                            <br>
+                            <input type = "password" id = "cpass" placeholder="Re-Enter Password" class = "inputbox" onfocusout= "myValidationconfirmPassword()" required><br>
+                            <span class="cpassword-validation-msg"></span><br>
+                            
+                            
+                            <button type="button" onclick="validatAndSubmit()" class="signupbtn">Sign up</button>
+                            <br>
+                            <p>Already a member? <a href="/html/login.html"> Sign in</a></p>
+                        </div>
+
+                    </form>
+                    
+                </div>
+            </div> 
+            <script src="/js/signup.js"></script>
+            <footer> &copy; <script>document.write(new Date().getFullYear());</script> Copyright by AI HUB | All Rights Reserved</footer>
+        </body>
+</html>
