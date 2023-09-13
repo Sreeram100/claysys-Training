@@ -40,7 +40,7 @@ SELECT*FROM employee; --select whole table
 UPDATE employee			--update the location of empid E010 to Banglore
 SET workLocation = 'Banglore'
 WHERE employeeId = 'E010';
-INSERT INTO employee VALUES('E012', 'Christo', 'Roger', '1980-07-9', 43,'Male', 'Backend Dev','Banglore', 'D002', 150000);
+INSERT INTO employee VALUES('E012', 'Christo', 'Roger', '1980-07-9', 43,'Male', 'Backend Dev','Banglore', 'D002', 118000);
 
 
 /*Using diffrent variation of select method*/
@@ -53,13 +53,21 @@ SELECT * FROM employee WHERE employeeFirstName LIKE 'C%';
 
 /*Delete Operation*/
 
-DELETE FROM employee WHERE employeeId = 'E012'; --deleted Employee row with empid E012
+DELETE FROM employee WHERE employeeId = 'E011'; --deleted Employee row with empid E012
 
 INSERT INTO employee VALUES('E012', 'Christo', 'Roger', '1980-07-9', 43,'Male', 'Accounting','Banglore', 'D004', 150000);
 
-SELECT MAX(salary) AS Salary FROM employee WHERE salary < (SELECT MAX(salary) FROM employee); --select the second largest salary
+/*Select 2nd Largest Salary*/
+SELECT  DISTINCT MAX(salary) AS Salary FROM employee WHERE salary < (SELECT MAX(salary) FROM employee); --select the second largest salary
  
-SELECT departmentId AS Employees, COUNT(*) as Count FROM employee GROUP BY departmentId; --List the number of employees in each department. 
+ WITH rankedEmployee AS(									--select 2nd larget salary with id
+	SELECT employeeId, employeeFirstName, salary,
+	DENSE_RANK() OVER (ORDER BY salary DESC) AS salaryRank
+	FROM employee)
+select distinct salary,employeeId from rankedEmployee where salaryRank = 2;
+
+
+SELECT departmentId, count(*) AS Employee_Number FROM employee GROUP BY departmentId; --List the number of employees in each department. 
 
 
 /*Created department table*/
@@ -87,55 +95,61 @@ ALTER TABLE employee            --Added Foreign Key to employee as departmentId
 ADD FOREIGN KEY (departmentId)
 REFERENCES department(departmentId);
 
+SELECT e.employeeId, e.employeeFirstName, e.employeeLastName, e.salary, d.departmentId, d.departmentName --combine necessary fields from two different tables by using primary key and foreign key constraints.
+FROM employee AS e
+INNER JOIN department AS d ON e.departmentId = d.departmentId;
+								
+
 /*  To implement diffrent CRUD [CREATE] operation */
 
-CREATE PROCEDURE createEntityDepartment @departmentId VARCHAR(30), @departmentName VARCHAR(30) --Add procedure to insert into department table	
+CREATE PROCEDURE spCreateEntityDepartment @departmentId VARCHAR(30), @departmentName VARCHAR(30) --Add procedure to insert into department table	
 AS
 INSERT INTO department(departmentId,departmentName) VALUES(@departmentId,@departmentName);
 GO
 
-EXEC createEntityDepartment @departmentId = 'D004', @departmentName = 'Training';
+EXEC spCreateEntityDepartment @departmentId = 'D005', @departmentName = 'Coaching';
 
+DELETE FROM department where departmentId = 'D005';
 /* To implement diffrent CRUD [READ] operation */
 
 
-CREATE PROCEDURE selectAllEmployeeDetails -- To select all the employees
+CREATE PROCEDURE spGetAllEmployeeDetails -- To select all the employees
 AS
 SELECT * FROM employee;
 GO
 
-EXEC selectAllEmployeeDetails;
+EXEC spGetAllEmployeeDetails;
 
-CREATE PROCEDURE selectEmployeefromcity @location varchar(30) --To select employes based on location
+CREATE PROCEDURE spGetEmployeefromcity @location varchar(30) --To select employes based on location
 AS
-SELECT * from employee where worklocation = @location FROM employee;
+SELECT * from employee where worklocation = @location;
 GO
 
-EXEC selectEmployeefromcity @location = 'Banglore';
+EXEC spGetEmployeefromcity @location = 'Banglore';
 
-CREATE PROCEDURE selectEmployeefromemployeeId @empId varchar(30) --To select employee based on empid
+CREATE PROCEDURE spGetEmployeefromemployeeId @empId varchar(30) --To select employee based on empid
 AS
 SELECT * FROM employee WHERE employeeId = @empId;
 GO
-EXEC selectEmployeefromemployeeId @empId = 'E001';
+EXEC spGetEmployeefromemployeeId @empId = 'E001';
 
-CREATE PROCEDURE getNameFromId @nameId varchar(30) --To get Employee name from empid
+CREATE PROCEDURE spGetNameFromId @nameId varchar(30) --To get Employee name from empid
 AS
 SELECT employeeFirstName,employeeLastName FROM employee WHERE employeeID = @nameId;
 GO
-EXEC getNameFromId @nameId = 'E001';
+EXEC spGetNameFromId @nameId = 'E001';
 
-CREATE PROCEDURE getDetailsFromDesignationLocation @designation varchar(30),@location varchar(30) --To get details of employe based on location and designation
+CREATE PROCEDURE spGetDetailsFromDesignationLocation @designation varchar(30),@location varchar(30) --To get details of employe based on location and designation
 AS
 SELECT * FROM employee WHERE designation = @designation AND workLocation = @location;
 GO
-EXEC getDetailsFromDesignationLocation @designation = 'Project Manager',@location = 'Kochi';
+EXEC spGetDetailsFromDesignationLocation @designation = 'Project Manager',@location = 'Kochi';
 
 
 
 /*  To implement diffrent CRUD [UPDATE] operation */
 
-CREATE PROCEDURE updateEmployeeLocation @employeeId varchar(30), @workLocation varchar(30)
+CREATE PROCEDURE spUpdateEmployeeLocation @employeeId varchar(30), @workLocation varchar(30)
 AS
 
 	UPDATE employee
@@ -145,9 +159,9 @@ AS
 GO
 
 
-/* To implement diffrent CRUD [UPDATE] operation */
+/* To implement diffrent CRUD [DELETE] operation */
 
-CREATE PROCEDURE deleteEmployee @employeeId VARCHAR(30)
+CREATE PROCEDURE spDeleteEmployee @employeeId VARCHAR(30)
 AS
 DELETE FROM employee WHERE employeeId = @employeeId;
 GO
@@ -163,8 +177,9 @@ INSERT INTO STUDENT VALUES ('S002','Joseph','Antony');
 INSERT INTO STUDENT VALUES ('S003','Alexa','Prime');
 INSERT INTO STUDENT VALUES ('S004','Cortana','Baker');
 
+SELECT * FROM STUDENT;
 
-CREATE PROCEDURE studentCRUD 
+CREATE PROCEDURE spStudentCRUD 
 @operation varchar (30),
 @studentID varchar (30),
 @firstName varchar(30) = NULL,
@@ -194,4 +209,4 @@ BEGIN
 	END
 END
 
-EXEC studentCRUD @operation = 'Read',@studentID = 'S001'; --Execution
+EXEC spStudentCRUD @operation = 'Read',@studentID = 'S001'; --Execution
