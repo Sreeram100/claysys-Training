@@ -207,3 +207,42 @@ BEGIN
 END
 
 EXEC spStudentCRUD @operation = 'Read',@studentID = 'S001'; --Execution
+
+EXEC spStudentCRUD @operation = 'Create',@studentID = 'S004', @firstName = 'Kevin', @lastName = 'Feige'; 
+
+EXEC spStudentCRUD @operation = 'Update',@studentID = 'S004',@firstName = 'Ryan', @lastName = 'Reynold';
+
+EXEC spStudentCRUD @operation = 'Delete',@studentID = 'S004';
+
+SELECT * FROM tblStudent;
+
+sp_help tblEmployees;
+
+/*OUTPUT PROCEDURE*/
+
+CREATE PROCEDURE spGetTotalCountOfEmployees
+@TotalCount INT OUT
+AS
+BEGIN 
+	SELECT @TotalCount = count(*) FROM tblEmployees
+END
+
+Declare @Total int
+
+EXEC spGetTotalCountOfEmployees @Total Out
+Print @Total
+
+/* RETURN PROCEDURE */
+
+CREATE PROCEDURE spGetTotalCountOfEmployees2
+AS
+BEGIN
+	return (select count(employeeId) FROM tblEmployees)
+END
+
+DECLARE @Total2 INT
+
+EXEC @Total2 = spGetTotalCountOfEmployees2 
+print @Total2
+
+
