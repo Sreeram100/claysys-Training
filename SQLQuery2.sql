@@ -1,7 +1,7 @@
-CREATE DATABASE phasetwo;
+CREATE DATABASE claysys;
 GO
 
-USE phasetwo;
+USE claysys;
 GO
 
 /* Created employee table
@@ -72,41 +72,43 @@ SELECT departmentId, count(*) AS Employee_Number FROM tblEmployees GROUP BY depa
 
 /*Created department table*/
 
-CREATE TABLE tblDepartment	( departmentId VARCHAR(30) PRIMARY KEY, --created department table
+CREATE TABLE tblDepartments	( departmentId VARCHAR(30) PRIMARY KEY, --created department table
 						  departmentName VARCHAR(30));
 
-INSERT INTO tblDepartment VALUES('D001','Project'); --inserted values to department table
-INSERT INTO tblDepartment VALUES('D002','IT');
-INSERT INTO tblDepartment VALUES('D003','BANKING');
-
-select * from tblDepartment;
 
 
-SELECT tblEmployees.employeeFirstName,tblEmployees.employeeLastName, tblDepartment.departmentName FROM tblEmployees INNER JOIN tblDepartment ON tblEmployees.departmentId = tblDepartment.departmentId; --did innerjoin
-SELECT tblEmployees.employeeFirstName,tblEmployees.employeeLastName, tblDepartment.departmentName FROM tblEmployees LEFT JOIN tblDepartment ON tblEmployees.departmentId = tblDepartment.departmentId; --did leftjoin
-SELECT tblEmployees.employeeFirstName,tblEmployees.employeeLastName, tblDepartment.departmentName FROM tblEmployees RIGHT JOIN tblDepartment ON tblEmployees.departmentId = tblDepartment.departmentId; --did rightjoin
-SELECT tblEmployees.employeeFirstName,tblEmployees.employeeLastName, tblDepartment.departmentName FROM tblEmployees FULL OUTER JOIN tblDepartment ON tblEmployees.departmentId = tblDepartment.departmentId; --did full outer join
+INSERT INTO tblDepartments VALUES('D001','Project'); --inserted values to department table
+INSERT INTO tblDepartments VALUES('D002','IT');
+INSERT INTO tblDepartments VALUES('D003','BANKING');
+
+select * from tblDepartments;
+
+
+SELECT tblEmployees.employeeFirstName,tblEmployees.employeeLastName, tblDepartments.departmentName FROM tblEmployees INNER JOIN tblDepartments ON tblEmployees.departmentId = tblDepartments.departmentId; --did innerjoin
+SELECT tblEmployees.employeeFirstName,tblEmployees.employeeLastName, tblDepartments.departmentName FROM tblEmployees LEFT JOIN tblDepartments ON tblEmployees.departmentId = tblDepartments.departmentId; --did leftjoin
+SELECT tblEmployees.employeeFirstName,tblEmployees.employeeLastName, tblDepartments.departmentName FROM tblEmployees RIGHT JOIN tblDepartments ON tblEmployees.departmentId = tblDepartments.departmentId; --did rightjoin
+SELECT tblEmployees.employeeFirstName,tblEmployees.employeeLastName, tblDepartments.departmentName FROM tblEmployees FULL OUTER JOIN tblDepartments ON tblEmployees.departmentId = tblDepartments.departmentId; --did full outer join
 
 
 ALTER TABLE tblEmployees            --Added Foreign Key to employee as departmentId
 ADD FOREIGN KEY (departmentId)
-REFERENCES tblDepartment(departmentId);
+REFERENCES tblDepartments(departmentId);
 
 SELECT e.employeeId, e.employeeFirstName, e.employeeLastName, e.salary, d.departmentId, d.departmentName --combine necessary fields from two different tables by using primary key and foreign key constraints.
 FROM tblEmployees AS e
-INNER JOIN tblDepartment AS d ON e.departmentId = d.departmentId;
+INNER JOIN tblDepartments AS d ON e.departmentId = d.departmentId;
 								
 
 /*  To implement diffrent CRUD [CREATE] operation */
 
 CREATE PROCEDURE spCreateEntityDepartment @departmentId VARCHAR(30), @departmentName VARCHAR(30) --Add procedure to insert into department table	
 AS
-INSERT INTO tblDepartment(departmentId,departmentName) VALUES(@departmentId,@departmentName);
+INSERT INTO tblDepartments(departmentId,departmentName) VALUES(@departmentId,@departmentName);
 GO
 
 EXEC spCreateEntityDepartment @departmentId = 'D005', @departmentName = 'Coaching';
 
-DELETE FROM tblDepartment where departmentId = 'D005';
+DELETE FROM tblDepartments where departmentId = 'D005';
 /* To implement diffrent CRUD [READ] operation */
 
 
@@ -166,15 +168,15 @@ GO
 
 /* Single Stored Procedure */
 
-CREATE TABLE tblStudent (studentId VARCHAR(30),firstName VARCHAR(30), lastName VARCHAR(30));
+CREATE TABLE tblStudents (studentId VARCHAR(30),firstName VARCHAR(30), lastName VARCHAR(30));
 GO
 
-INSERT INTO tblStudent VALUES ('S001','Ram','Kumar');
-INSERT INTO tblStudent VALUES ('S002','Joseph','Antony');
-INSERT INTO tblStudent VALUES ('S003','Alexa','Prime');
-INSERT INTO tblStudent VALUES ('S004','Cortana','Baker');
+INSERT INTO tblStudents VALUES ('S001','Ram','Kumar');
+INSERT INTO tblStudents VALUES ('S002','Joseph','Antony');
+INSERT INTO tblStudents VALUES ('S003','Alexa','Prime');
+INSERT INTO tblStudents VALUES ('S004','Cortana','Baker');
 
-SELECT * FROM tblStudent;
+SELECT * FROM tblStudents;
 
 CREATE PROCEDURE spStudentCRUD 
 @operation varchar (30),
@@ -186,22 +188,22 @@ AS
 BEGIN
 	IF @operation = 'Create'
 	BEGIN
-		INSERT INTO tblStudent(studentId,firstName, lastName) VALUES(@studentID,@firstName,@lastName);
+		INSERT INTO tblStudents(studentId,firstName, lastName) VALUES(@studentID,@firstName,@lastName);
 	END
 
 	IF @operation = 'Read'
 	BEGIN
-		SELECT*FROM tblStudent WHERE studentId = @studentId;
+		SELECT*FROM tblStudents WHERE studentId = @studentId;
 	END
 	IF @operation = 'Update'
 	BEGIN
-		UPDATE tblStudent
+		UPDATE tblStudents
 		SET firstName = @firstName, lastName = @lastName
 		WHERE studentId = @studentId;
 	END
 	IF @operation = 'Delete'
 	BEGIN
-		DELETE FROM tblStudent 
+		DELETE FROM tblStudents 
 		WHERE studentId = @studentId;
 	END
 END
@@ -214,7 +216,7 @@ EXEC spStudentCRUD @operation = 'Update',@studentID = 'S004',@firstName = 'Ryan'
 
 EXEC spStudentCRUD @operation = 'Delete',@studentID = 'S004';
 
-SELECT * FROM tblStudent;
+SELECT * FROM tblStudents;
 
 sp_help tblEmployees;
 
